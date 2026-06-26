@@ -22,7 +22,10 @@ export default function RentalsCatalog() {
   useEffect(() => {
     const fetchLogisticsMenu = async () => {
       try {
-        const response = await fetch('http://localhost:8000/api/marketplace-catalog/');
+        // 🚀 DYNAMIC ROUTING PATHWAY: Abstracted route pointing straight to active API
+        const backendBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
+        
+        const response = await fetch(`${backendBaseUrl}/api/marketplace-catalog/`);
         if (response.ok) {
           const data = await response.json();
           // Filtered automatically right out of our dual marketplace data pipeline stream
@@ -62,7 +65,7 @@ export default function RentalsCatalog() {
           Event <span className="text-emerald-900">Rental Supplies</span>
         </h1>
         <p className="text-slate-600 text-xs sm:text-sm leading-relaxed max-w-md mx-auto">
-          Rent high-end furniture, premium tableware, and heavy-duty outdoor canopies. Free setup available with catering packages.
+          Rent high-end furniture, premium tableware, and heavy-duty outdoor canopies. 
         </p>
       </div>
 
@@ -135,14 +138,6 @@ export default function RentalsCatalog() {
           ))}
         </div>
       )}
-
-      {/* Surcharge Condition Warning Disclaimer Alert Component */}
-      <div className="max-w-7xl mx-auto mt-12 bg-amber-50/60 border border-amber-200/50 p-4 rounded-2xl text-[11px] text-amber-900 flex gap-2.5 items-start">
-        <Info className="w-4 h-4 shrink-0 text-amber-600 mt-0.5" />
-        <p className="leading-relaxed font-medium">
-          <strong>Catering Bundle Deal:</strong> All structural canopies, royal banquet chairs, and luxury tableware collections qualify for a 100% logistical surcharge waiver if booked alongside any premium culinary food pot package options.
-        </p>
-      </div>
     </div>
   );
 }

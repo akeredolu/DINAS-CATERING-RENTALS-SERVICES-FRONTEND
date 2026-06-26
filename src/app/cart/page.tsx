@@ -35,11 +35,14 @@ export default function CartAndCheckoutPage() {
 
   // Launch Paystack Core Portal Popups
   const executePaystackGateway = () => {
+    // Falls back to your test key if the environment variable isn't injected yet
+    const paystackPublicKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || 'pk_test_07ca2f38b19da687aae108a0148f5652e7c24be6';
+
     // @ts-ignore
     if (typeof window !== "undefined" && window.PaystackPop) {
       // @ts-ignore
       const handler = window.PaystackPop.setup({
-        key: 'pk_test_07ca2f38b19da687aae108a0148f5652e7c24be6',
+        key: paystackPublicKey,
         email: shipping.email,
         amount: getCartTotal() * 100, // Amount converted to Kobo
         currency: 'NGN',
@@ -74,12 +77,10 @@ export default function CartAndCheckoutPage() {
       total_amount: getCartTotal(),
       paystack_reference: paymentDetails.reference,
       
-          // 🛠️ CLEAN & TYPE-SAFE RE-MAPPER PIPELINE:
+      // 🛠️ CLEAN & TYPE-SAFE RE-MAPPER PIPELINE:
       items: cart.map(item => {
-        // Force the ID to a number safely
         let cleanNumericId = Number(item.id);
 
-        // If your frontend code adds a 500 offset value for rentals (e.g., 503 becomes 3)
         if (cleanNumericId > 500) {
           cleanNumericId = cleanNumericId - 500;
         }
@@ -94,7 +95,10 @@ export default function CartAndCheckoutPage() {
     };
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/orders/create/", {
+      // 🚀 DYNAMIC ROUTING PATHWAY FOR LOCAL VS LIVE SERVERS
+      const backendBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000";
+      
+      const res = await fetch(`${backendBaseUrl}/api/orders/create/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
@@ -106,9 +110,11 @@ export default function CartAndCheckoutPage() {
       } else {
         const errorData = await res.json();
         console.error("Django Validation Exceptions:", errorData);
+        alert("Server validation failed. Please inspect input entries.");
       }
     } catch (err) {
       console.error("Connection failed:", err);
+      alert("Could not connect to the server. Check your network connection.");
     } finally {
       setProcessing(false);
     }
@@ -200,7 +206,7 @@ export default function CartAndCheckoutPage() {
           <span className="text-3xl font-black text-emerald-900 tracking-tight">₦{getCartTotal().toLocaleString()}</span>
         </div>
 
-        {/* Form fields rewritten to explicitly assign valid accessible attributes */}
+        {/* Form */}
         <form onSubmit={handleCheckoutSubmit} className="space-y-4">
           <div>
             <label htmlFor="client_name" className="sr-only">Full Name</label>

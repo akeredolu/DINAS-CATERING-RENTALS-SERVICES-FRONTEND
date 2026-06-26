@@ -1,12 +1,15 @@
 "use client";
 
 import React, { useState, useMemo } from 'react';
-import { Calculator, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { useCart } from '@/context/CartContext'; // 🚀 PIPELINE INTEGRATION
+import { Calculator, ShoppingBag, CheckCircle2 } from 'lucide-react';
 
 export default function InstantQuoteBuilder() {
+  const { addToCart } = useCart(); // Access cart control state handlers
   const [guests, setGuests] = useState<number>(100);
   const [menuTier, setMenuTier] = useState<string>('standard');
   const [needCanopies, setNeedCanopies] = useState<boolean>(false);
+  const [addedNotification, setAddedNotification] = useState<boolean>(false);
 
   // Memoized derived state recalculates dynamically whenever inputs change
   const calculatedTotal = useMemo(() => {
@@ -31,6 +34,26 @@ export default function InstantQuoteBuilder() {
     }).format(amount);
   };
 
+  // Dispatch fully compiled calculator profile into the shopping checkout state
+  const handleAddEstimateToCart = () => {
+    const packageId = Date.now(); // Generate a lightweight runtime stamp identifier
+    const menuLabel = menuTier.charAt(0).toUpperCase() + menuTier.slice(1);
+    const descriptionSummary = `Custom Catering: ${guests} Attendees (${menuLabel} Menu) ${needCanopies ? `+ ${Math.ceil(guests / 50)} Tents` : ''}`;
+
+    addToCart({
+      id: packageId,
+      name: `Custom Event Package (${menuLabel} Tier)`,
+      price: calculatedTotal,
+      quantity: 1,
+      image: "", // Empty or placeholder for generic structural package bundle items
+      isRental: false,
+      // Pass parameters safely inside context if your Cart Context model structure requires metadata trace logs
+    });
+
+    setAddedNotification(true);
+    setTimeout(() => setAddedNotification(false), 3000); // clear visibility timer
+  };
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-16">
       <div className="text-center mb-12 space-y-2">
@@ -42,7 +65,7 @@ export default function InstantQuoteBuilder() {
         </p>
       </div>
 
-      <div className="grid md:grid-cols-5 gap-8 items-start">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-8 items-start">
         {/* Input Configuration Panel */}
         <div className="md:col-span-3 bg-white border border-slate-200/60 p-6 rounded-2xl shadow-sm space-y-6">
           
@@ -50,13 +73,13 @@ export default function InstantQuoteBuilder() {
           <div className="space-y-2">
             <div className="flex justify-between text-xs font-bold text-slate-700">
               <label htmlFor="guest-range">Target Guest Capacity</label>
-              <span className="text-emerald-900 bg-emerald-50 px-2 py-0.5 rounded">{guests} Attendees</span>
+              <span className="text-emerald-900 bg-emerald-50 px-2 py-0.5 rounded font-black">{guests} Attendees</span>
             </div>
             <input 
               id="guest-range"
               type="range" min="20" max="1000" step="10" value={guests} 
               onChange={(e) => setGuests(Number(e.target.value))}
-              className="w-full accent-emerald-900 cursor-pointer h-2 bg-slate-100 rounded-lg"
+              className="w-full accent-emerald-900 cursor-pointer h-2 bg-slate-100 rounded-lg transition duration-200"
             />
           </div>
 
@@ -66,7 +89,7 @@ export default function InstantQuoteBuilder() {
             <select 
               id="menu-select"
               value={menuTier} onChange={(e) => setMenuTier(e.target.value)}
-              className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-xs font-medium text-slate-800 focus:outline-none focus:border-emerald-900"
+              className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-xs font-medium text-slate-800 focus:outline-none focus:border-emerald-900 transition"
             >
               <option value="standard">Standard Native Tier (₦2,500 / head)</option>
               <option value="premium">Premium Continental Buffet (₦4,500 / head)</option>
@@ -83,7 +106,7 @@ export default function InstantQuoteBuilder() {
             <input 
               id="canopy-checkbox"
               type="checkbox" checked={needCanopies} onChange={(e) => setNeedCanopies(e.target.checked)}
-              className="w-5 h-5 rounded accent-emerald-900 cursor-pointer"
+              className="w-5 h-5 rounded accent-emerald-900 cursor-pointer transition"
             />
           </div>
         </div>
@@ -103,6 +126,22 @@ export default function InstantQuoteBuilder() {
                 <div className="flex justify-between"><span>Menu Selection:</span> <span className="text-white capitalize font-medium">{menuTier}</span></div>
                 <div className="flex justify-between"><span>Canopies:</span> <span className="text-white font-medium">{needCanopies ? `Yes (${Math.ceil(guests / 50)} Tents)` : 'No'}</span></div>
               </div>
+
+              {/* 🚀 ACTION LINK TIE-IN: Push configuration to active checkout lifecycle */}
+              <button
+                type="button"
+                onClick={handleAddEstimateToCart}
+                className="w-full mt-2 bg-emerald-800 hover:bg-emerald-700 text-white text-xs font-bold uppercase tracking-wider p-3.5 rounded-xl transition flex items-center justify-center gap-2 cursor-pointer active:scale-98"
+              >
+                <ShoppingBag className="w-4 h-4 text-amber-500" />
+                <span>Add Custom Bundle</span>
+              </button>
+
+              {addedNotification && (
+                <div className="text-[10px] text-amber-500 text-center font-bold animate-fade-in animate-pulse">
+                  ✓ Quote bundle loaded safely into cart elements!
+                </div>
+              )}
             </div>
           </div>
 

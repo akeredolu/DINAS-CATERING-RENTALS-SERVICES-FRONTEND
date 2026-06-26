@@ -21,7 +21,7 @@ export default function AboutPage() {
             Our Culinary & <span className="text-amber-500">Events Journey</span>
           </h1>
           <p className="text-slate-400 text-xs sm:text-sm uppercase tracking-widest font-black max-w-md mx-auto pt-1">
-            Dina Catering and Rentals Services
+            Dinas Catering and Rentals Services
           </p>
         </div>
       </section>
@@ -41,7 +41,7 @@ export default function AboutPage() {
           
           <div className="space-y-4 text-slate-600 text-xs sm:text-sm leading-relaxed font-medium">
             <p>
-              Based in Abuja, Nigeria, Dina Catering has grown into a leading name for luxury event catering and high-end rentals nationwide. We specialize in local delicacies, rich continental stews, desserts, and flawless event logistics.
+              Based in Abuja, Nigeria, Dinas Catering has grown into a leading name for luxury event catering and high-end rentals nationwide. We specialize in local delicacies, rich continental stews, desserts, and flawless event logistics.
             </p>
             <p>
               Whether managing a 1,000-guest wedding or cooking personalized bulk meals directly inside your kitchen, we provide premium culinary solutions that make every occasion unforgettable.

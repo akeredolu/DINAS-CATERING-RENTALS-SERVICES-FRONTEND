@@ -13,8 +13,10 @@ export default function ContactPage() {
     setSubmitting(true);
     
     try {
-      // 🚀 REAL CONNECTION: Pointing to your Django Backend API point route
-      const response = await fetch('http://localhost:8000/api/contact/', {
+      // 🚀 DYNAMIC ROUTING PATHWAY: Swap local host string with process.env
+      const backendBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
+
+      const response = await fetch(`${backendBaseUrl}/api/contact/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -33,7 +35,7 @@ export default function ContactPage() {
       }
     } catch (err) {
       console.error("Communication channel failed network transit:", err);
-      alert("Network connectivity issue. Check if your Django server is running.");
+      alert("Network connectivity issue. Check your connection or if the server is running.");
     } finally {
       setSubmitting(false);
     }

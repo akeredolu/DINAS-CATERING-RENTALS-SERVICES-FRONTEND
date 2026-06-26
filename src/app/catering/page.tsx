@@ -22,7 +22,10 @@ export default function CateringCatalog() {
   useEffect(() => {
     const fetchKitchenMenu = async () => {
       try {
-        const response = await fetch('http://localhost:8000/api/marketplace-catalog/');
+        // 🚀 DYNAMIC ROUTING PATHWAY: Swap local host string with process.env
+        const backendBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
+        
+        const response = await fetch(`${backendBaseUrl}/api/marketplace-catalog/`);
         if (response.ok) {
           const data = await response.json();
           // Filtered automatically right out of our dual marketplace data pipeline stream
@@ -62,7 +65,7 @@ export default function CateringCatalog() {
           Gourmet <span className="text-emerald-900">Catering Menu</span>
         </h1>
         <p className="text-slate-600 text-xs sm:text-sm leading-relaxed max-w-md mx-auto">
-          Authentic local delicacies and continental food pots prepared freshly on order from our central Wuse II kitchen desk.
+          Authentic local delicacies and continental food pots prepared freshly on order from our kitchen.
         </p>
       </div>
 

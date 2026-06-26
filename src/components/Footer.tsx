@@ -1,10 +1,22 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Phone, Mail, MapPin, MessageSquare, Shield, Info, Heart } from 'lucide-react';
+import { Phone, Mail, MapPin, MessageSquare, Shield, Info } from 'lucide-react';
 
 export default function Footer() {
   const [activeModal, setActiveModal] = useState<'TERMS' | 'SUPPORT' | null>(null);
+
+  // Prevent background scrolling when a modal overlay is open
+  useEffect(() => {
+    if (activeModal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [activeModal]);
 
   return (
     <footer className="bg-slate-900 text-slate-300 border-t-2 border-emerald-800">
@@ -53,12 +65,20 @@ export default function Footer() {
           </h4>
           <ul className="space-y-3 text-xs font-medium">
             <li>
-              <button onClick={() => setActiveModal('TERMS')} className="hover:text-amber-500 text-left transition block w-full">
+              <button 
+                type="button"
+                onClick={() => setActiveModal('TERMS')} 
+                className="hover:text-amber-500 text-left transition block w-full cursor-pointer"
+              >
                 Terms of Service
               </button>
             </li>
             <li>
-              <button onClick={() => setActiveModal('SUPPORT')} className="hover:text-amber-500 text-left transition block w-full">
+              <button 
+                type="button"
+                onClick={() => setActiveModal('SUPPORT')} 
+                className="hover:text-amber-500 text-left transition block w-full cursor-pointer"
+              >
                 Customer Support & Refund Policy
               </button>
             </li>
@@ -76,7 +96,7 @@ export default function Footer() {
           <ul className="space-y-4 text-xs text-slate-400">
             <li className="flex items-start gap-3">
               <MapPin className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
-              <span>123 Event Avenue, Wuse II, Abuja, Nigeria</span>
+              <span>PW-Kubwa, Abuja, Nigeria</span>
             </li>
             <li className="flex items-center gap-3">
               <Phone className="w-4 h-4 text-amber-500 shrink-0" />
@@ -84,7 +104,7 @@ export default function Footer() {
             </li>
             <li className="flex items-center gap-3">
               <Mail className="w-4 h-4 text-amber-500 shrink-0" />
-              <span>info@yourcompany.com</span>
+              <span>info@dinascateringandrentals.com</span>
             </li>
           </ul>
         </div>
@@ -94,31 +114,45 @@ export default function Footer() {
       {/* Lower Copyright Tier Bar */}
       <div className="bg-slate-950 text-slate-500 py-6 text-center text-xs border-t border-slate-800/60 px-4">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p>&copy; {new Date().getFullYear()} Dina Catering and Rental Services. All rights reserved.</p>
-          
+          <p className="text-amber-500 font-semibold hover:text-amber-400 transition-colors duration-200 border-b border-dashed border-amber-500/30 hover:border-amber-400">
+            {new Date().getFullYear()} Dinas Catering and Rental Services. All rights reserved.</p>
           <div className="flex items-center gap-1.5 tracking-wide">
             <span>Engineered and Designed by</span>
-          <a 
-            href="https://waheed-portfolio-ruby.vercel.app/" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="text-amber-500 font-semibold hover:text-amber-400 transition-colors duration-200 border-b border-dashed border-amber-500/30 hover:border-amber-400"
-          >
-            Stemcodemaster
-          </a>
+            <a 
+              href="https://waheed-portfolio-ruby.vercel.app/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-amber-500 font-semibold hover:text-amber-400 transition-colors duration-200 border-b border-dashed border-amber-500/30 hover:border-amber-400"
+            >
+              Stemcodemaster
+            </a>
           </div>
         </div>
       </div>
 
       {/* ==================== TERMS OF SERVICE MODAL OVERLAY ==================== */}
       {activeModal === 'TERMS' && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white text-slate-800 rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto shadow-2xl p-6 sm:p-8">
+        <div 
+          className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          onClick={() => setActiveModal(null)}
+          role="dialog"
+          aria-modal="true"
+        >
+          <div 
+            className="bg-white text-slate-800 rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto shadow-2xl p-6 sm:p-8"
+            onClick={(e) => e.stopPropagation()} // Keeps clicking modal content from accidentally closing it
+          >
             <div className="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
               <h3 className="text-lg font-black text-slate-900 flex items-center gap-2">
                 <Shield className="w-5 h-5 text-emerald-900" /> Terms of Service
               </h3>
-              <button onClick={() => setActiveModal(null)} className="text-slate-400 hover:text-slate-600 font-bold text-sm bg-slate-100 px-3 py-1 rounded-lg">Close</button>
+              <button 
+                type="button"
+                onClick={() => setActiveModal(null)} 
+                className="text-slate-400 hover:text-slate-600 font-bold text-sm bg-slate-100 px-3 py-1 rounded-lg cursor-pointer"
+              >
+                Close
+              </button>
             </div>
             <div className="space-y-4 text-xs sm:text-sm leading-relaxed text-slate-600">
               <p><strong>1. Booking Deadlines:</strong> General food pot orders and small scale requests must be finalized at least 72 hours before dispatch. Full event planning requests require confirmation a minimum of 2 to 4 weeks prior to the target event date.</p>
@@ -131,13 +165,27 @@ export default function Footer() {
 
       {/* ==================== CUSTOMER SUPPORT MODAL OVERLAY ==================== */}
       {activeModal === 'SUPPORT' && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white text-slate-800 rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto shadow-2xl p-6 sm:p-8">
+        <div 
+          className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          onClick={() => setActiveModal(null)}
+          role="dialog"
+          aria-modal="true"
+        >
+          <div 
+            className="bg-white text-slate-800 rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto shadow-2xl p-6 sm:p-8"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
               <h3 className="text-lg font-black text-slate-900 flex items-center gap-2">
                 <Info className="w-5 h-5 text-emerald-900" /> Support & Refund Guidelines
               </h3>
-              <button onClick={() => setActiveModal(null)} className="text-slate-400 hover:text-slate-600 font-bold text-sm bg-slate-100 px-3 py-1 rounded-lg">Close</button>
+              <button 
+                type="button"
+                onClick={() => setActiveModal(null)} 
+                className="text-slate-400 hover:text-slate-600 font-bold text-sm bg-slate-100 px-3 py-1 rounded-lg cursor-pointer"
+              >
+                Close
+              </button>
             </div>
             <div className="space-y-4 text-xs sm:text-sm leading-relaxed text-slate-600">
               <p><strong>1. Cancellation and Refunds:</strong> Cancellations made over 14 days before an event qualify for a full refund of the deposit. Cancellations logged within 7 days of the scheduled time forfeit the reservation down-payment due to immediate ingredient acquisition costs.</p>

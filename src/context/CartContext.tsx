@@ -15,7 +15,7 @@ interface CartContextType {
   cart: CartItem[];
   addToCart: (item: CartItem) => void;
   removeFromCart: (id: number, isByDozen: boolean) => void;
-  updateQuantity: (id: number, isByDozen: boolean, newQuantity: number) => void; // Added for +/- controls
+  updateQuantity: (id: number, isByDozen: boolean, newQuantity: number) => void;
   clearCart: () => void;
   getCartTotal: () => number;
 }
@@ -24,8 +24,9 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cart, setCart] = useState<CartItem[]>([]);
+  const [isInitialized, setIsInitialized] = useState(false);
 
-  // LocalStorage Persist Load
+  // 1. LocalStorage Load (Runs exactly once on mount)
   useEffect(() => {
     const savedCart = localStorage.getItem('dina_catering_cart');
     if (savedCart) {
@@ -35,12 +36,15 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         console.error("Failed parsing cart layout tokens:", e);
       }
     }
+    setIsInitialized(true); // Cart loading is complete
   }, []);
 
-  // LocalStorage Persist Sync
+  // 2. LocalStorage Sync (ONLY fires AFTER the cart has been initialized)
   useEffect(() => {
-    localStorage.setItem('dina_catering_cart', JSON.stringify(cart));
-  }, [cart]);
+    if (isInitialized) {
+      localStorage.setItem('dina_catering_cart', JSON.stringify(cart));
+    }
+  }, [cart, isInitialized]);
 
   const addToCart = (newItem: CartItem) => {
     setCart((prevCart) => {
@@ -62,7 +66,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     );
   };
 
-  // NEW: Dynamic handler to scale quantities up/down inline
   const updateQuantity = (id: number, isByDozen: boolean, newQuantity: number) => {
     if (newQuantity <= 0) {
       removeFromCart(id, isByDozen);

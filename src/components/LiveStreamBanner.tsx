@@ -2,29 +2,33 @@
 import React, { useState, useEffect } from 'react';
 import { Radio, VideoOff } from 'lucide-react';
 
+// Automatically shifts between your live Render endpoint and local development
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+
 export default function LiveStreamBanner() {
   const [isLive, setIsLive] = useState(false);
   const [streamUrl, setStreamUrl] = useState("");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Dynamic query verification pulling parameters from our Django endpoint
-    fetch('http://127.0.0.1:8000/api/live-status/')
-      .then(res => res.json())
+    fetch(`${API_BASE_URL}/api/live-status/`, {
+      cache: 'no-store'
+    })
+      .then(res => {
+        if (!res.ok) throw new Error('Network response not ok');
+        return res.json();
+      })
       .then(data => {
         if (data.is_live) {
           setIsLive(true);
-          setStreamUrl(data.youtube_url);
+          setStreamUrl(data.youtube_url || "");
         }
       })
-      .catch(() => {
-        console.log("Live tracking feed offline. Loading local development mock placeholder.");
-        // OPTIONAL DEVELOPMENT MOCK: Uncomment the next 2 lines to force-preview the banner layout locally without Django running
-        // setIsLive(true);
-        // setStreamUrl("https://youtube.com"); 
+      .catch((err) => {
+        console.error("Live tracking feed offline:", err);
       })
       .finally(() => setLoading(false));
-  }, []);
+  }, []); // Empty dependency array keeps code execution clean on component mount
 
   // Safe fallback guard: prevents unstyled empty rendering slots during active execution
   if (loading) return null;
