@@ -29,7 +29,7 @@ export default function RentalsCatalog() {
         if (response.ok) {
           const data = await response.json();
           // Filtered automatically right out of our dual marketplace data pipeline stream
-          setRentals(data.rentalInventory || []);
+          setRentals(data.catalog.hardware || []);
         }
       } catch (err) {
         console.error("Failed to fetch live admin rental inventory items:", err);
