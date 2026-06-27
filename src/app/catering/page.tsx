@@ -29,7 +29,7 @@ export default function CateringCatalog() {
         if (response.ok) {
           const data = await response.json();
           // Filtered automatically right out of our dual marketplace data pipeline stream
-          setDishes(data.foodMenu || []);
+          setDishes(data.catalog.dishes || []);
         }
       } catch (err) {
         console.error("Failed to fetch live admin catering inventory items:", err);
