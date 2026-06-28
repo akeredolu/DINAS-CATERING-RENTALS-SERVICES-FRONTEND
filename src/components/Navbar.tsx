@@ -11,7 +11,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           <Link href="/" className="text-2xl font-bold text-amber-500 tracking-wide">
-            DINAS <span className="text-white text-lg font-light">CATERING & RENTALS SERVICES</span>
+            DINA <span className="text-white text-lg font-light">EVENTS AND CATERING SERVICES</span>
           </Link>
 
           <div className="hidden md:flex space-x-8 items-center font-medium">

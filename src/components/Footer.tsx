@@ -26,14 +26,14 @@ export default function Footer() {
         {/* Brand & Mission Column */}
         <div className="space-y-4">
           <h3 className="text-xl font-black tracking-wider text-amber-500">
-            DINAS <span className="text-white text-sm font-light block">CATERING & RENTALS SERVICES</span>
+            DINA <span className="text-white text-sm font-light block">EVENTS AND CATERING SERVICES</span>
           </h3>
           <p className="text-xs text-slate-400 leading-relaxed">
             Abuja’s premier catering and luxury rental service. We craft unforgettable culinary experiences paired with flawless event setups for corporate functions, weddings, and private gatherings nationwide.
           </p>
           <div className="pt-2">
             <a 
-              href="https://wa.me/2348000000000?text=Hello%20Dina%20Catering,%20I%20need%20assistance%20with%20an%20event."
+              href="https://wa.me/2348000000000?text=Hello%20Dina%20Events,%20I%20need%20assistance%20with%20an%20Services."
               target="_blank" 
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition shadow-sm"
@@ -104,7 +104,7 @@ export default function Footer() {
             </li>
             <li className="flex items-center gap-3">
               <Mail className="w-4 h-4 text-amber-500 shrink-0" />
-              <span>info@dinascateringandrentals.com</span>
+              <span>info@dinaeventsandcateringservices.com</span>
             </li>
           </ul>
         </div>
@@ -115,7 +115,7 @@ export default function Footer() {
       <div className="bg-slate-950 text-slate-500 py-6 text-center text-xs border-t border-slate-800/60 px-4">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-amber-500 font-semibold hover:text-amber-400 transition-colors duration-200 border-b border-dashed border-amber-500/30 hover:border-amber-400">
-            {new Date().getFullYear()} Dinas Catering and Rental Services. All rights reserved.</p>
+            {new Date().getFullYear()} Dina Events and Catering Services. All rights reserved.</p>
           <div className="flex items-center gap-1.5 tracking-wide">
             <span>Engineered and Designed by</span>
             <a 

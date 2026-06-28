@@ -72,7 +72,7 @@ export default function ContactPage() {
                 <CheckCircle className="w-12 h-12 text-emerald-700 mx-auto" />
                 <h4 className="text-lg font-black text-slate-900">Message Dispatched Smoothly</h4>
                 <p className="text-xs text-slate-600 leading-relaxed max-w-md mx-auto">
-                  Thank you for reaching out to Dina Catering! An automated confirmation breakdown notification has hit your email address. Our team will review your message guidelines shortly.
+                  Thank you for reaching out to Dina Events and Catering Services! An automated confirmation breakdown notification has hit your email address. Our team will review your message guidelines shortly.
                 </p>
                 <button 
                   onClick={() => setSubmitted(false)} 
@@ -141,7 +141,7 @@ export default function ContactPage() {
               <ul className="space-y-4 text-xs">
                 <li className="flex items-center gap-3.5">
                   <Phone className="w-4 h-4 text-amber-500 shrink-0" />
-                  <span className="font-medium">+234 803 752 3826</span>
+                  <span className="font-medium">+234 803 607 2417</span>
                 </li>
                 <li className="flex items-center gap-3.5">
                   <Mail className="w-4 h-4 text-amber-500 shrink-0" />

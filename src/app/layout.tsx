@@ -8,7 +8,7 @@ import Navbar from "@/components/Navbar"; // 1. Imported your new Navbar here
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Dina Catering & Rentals Services",
+  title: "Dina Events and Catering Services",
   description: "Luxury culinary and event setup solutions in Abuja",
 };
 
