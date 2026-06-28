@@ -20,26 +20,43 @@ export default function RentalsCatalog() {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const fetchLogisticsMenu = async () => {
-      try {
-        // 🚀 DYNAMIC ROUTING PATHWAY: Abstracted route pointing straight to active API
-        const backendBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
-        
-        const response = await fetch(`${backendBaseUrl}/api/marketplace-catalog/`);
-        if (response.ok) {
-          const data = await response.json();
-          // Filtered automatically right out of our dual marketplace data pipeline stream
-          setRentals(data.rentalInventory || []);
-        }
-      } catch (err) {
-        console.error("Failed to fetch live admin rental inventory items:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchLogisticsMenu = async () => {
+    try {
+      const backendBaseUrl =
+        process.env.NEXT_PUBLIC_API_URL ??
+        "https://dinas-catering-rentals-services-backend.onrender.com";
 
-    fetchLogisticsMenu();
-  }, []);
+      const response = await fetch(
+        `${backendBaseUrl}/api/marketplace-catalog/`,
+        {
+          cache: "no-store",
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      console.log("Marketplace API:", data);
+      console.log("Rental Inventory:", data.rentalInventory);
+
+      setRentals(
+        Array.isArray(data.rentalInventory)
+          ? data.rentalInventory
+          : []
+      );
+    } catch (err) {
+      console.error("Failed to fetch rental inventory:", err);
+    
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchLogisticsMenu();
+}, []);
 
   // Standardized Currency Formatter for Nigerian Naira
   const formatNaira = (amount: number) => {

@@ -20,26 +20,38 @@ export default function CateringCatalog() {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const fetchKitchenMenu = async () => {
-      try {
-        // 🚀 DYNAMIC ROUTING PATHWAY: Swap local host string with process.env
-        const backendBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
-        
-        const response = await fetch(`${backendBaseUrl}/api/marketplace-catalog/`);
-        if (response.ok) {
-          const data = await response.json();
-          // Filtered automatically right out of our dual marketplace data pipeline stream
-          setDishes(data.foodMenu || []);
-        }
-      } catch (err) {
-        console.error("Failed to fetch live admin catering inventory items:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchKitchenMenu = async () => {
+    try {
+      const backendBaseUrl =
+        process.env.NEXT_PUBLIC_API_URL ??
+        "https://dinas-catering-rentals-services-backend.onrender.com";
 
-    fetchKitchenMenu();
-  }, []);
+      const response = await fetch(
+        `${backendBaseUrl}/api/marketplace-catalog/`,
+        {
+          cache: "no-store",
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      console.log("Marketplace:", data);
+
+      setDishes(Array.isArray(data.foodMenu) ? data.foodMenu : []);
+    } catch (error) {
+      console.error("Marketplace fetch failed:", error);
+    
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchKitchenMenu();
+}, []);
 
   // Standardized Currency Formatter for Nigerian Naira
   const formatNaira = (amount: number) => {

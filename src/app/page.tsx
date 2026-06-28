@@ -477,7 +477,6 @@ export default function IntegratedCorporateHub() {
           </>
         )}
       </section>
-      
 
       {/* 3. Event Types Matrix Cards */}
       <section className="max-w-7xl mx-auto px-4 py-16">
@@ -630,9 +629,6 @@ export default function IntegratedCorporateHub() {
                     src={item.img} 
                     alt={item.name} 
                     className="w-full h-52 object-cover transition-transform duration-500 ease-out group-hover:scale-105" 
-                    onError={(e: any) => {
-                      e.target.src = 'https://unsplash.com';
-                    }}
                   />
                   <span className="absolute top-3 left-3 bg-slate-950/80 backdrop-blur-sm text-amber-500 font-black text-[9px] tracking-wider uppercase px-2 py-0.5 rounded shadow-sm">
                     Fresh Dispatch
@@ -648,7 +644,7 @@ export default function IntegratedCorporateHub() {
                 
                 <div className="p-6 pt-0 border-t border-slate-50 flex items-center justify-between transition-colors duration-200 group-hover:bg-slate-50/30">
                   <div>
-                    <span className="text-xl font-black text-slate-900">₦{(Number(item.price) || 0).toLocaleString()}</span>
+                    <span className="text-xl font-black text-slate-900">₦{Number(item.price).toLocaleString()}</span>
                     <span className="text-[9px] text-slate-400 block">Per Unit Base</span>
                   </div>
                   <button 
@@ -657,9 +653,9 @@ export default function IntegratedCorporateHub() {
                       e.preventDefault();
                       e.stopPropagation();
                       addToCart({ 
-                        id: Number(item.id), // 🟢 FIXED: Keeps original ID intact to connect with CartContext
+                        id: Number(item.id) + 1000, 
                         name: item.name, 
-                        price: Number(item.price) || 0, 
+                        price: Number(item.price), 
                         quantity: 1, 
                         image: item.img, 
                         isRental: false,
@@ -680,6 +676,7 @@ export default function IntegratedCorporateHub() {
 
       {/* 7. Logistics Section: Event Rentals Matrix */}
       <section id="rental-menu" className="max-w-7xl mx-auto px-4 py-16 bg-slate-900 text-white rounded-3xl my-10 shadow-2xl overflow-hidden relative border border-slate-800">
+        {/* Decorative structural background elements to support dark UI depth */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none"></div>
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl pointer-events-none"></div>
 
@@ -713,9 +710,6 @@ export default function IntegratedCorporateHub() {
                       src={item.img} 
                       alt={item.name} 
                       className="w-full h-full object-cover transform transition-transform duration-500 ease-out group-hover:scale-105" 
-                      onError={(e: any) => {
-                        e.target.src = 'https://unsplash.com';
-                      }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   </div>
@@ -727,24 +721,25 @@ export default function IntegratedCorporateHub() {
 
                 <div className="flex items-center justify-between pt-3 border-t border-slate-900">
                   <div>
-                    <span className="text-sm font-black text-amber-500">₦{(Number(item.price) || 0).toLocaleString()}</span>
+                    <span className="text-sm font-black text-amber-500">₦{Number(item.price).toLocaleString()}</span>
                     <span className="text-[9px] text-slate-500 block">Rental Fee</span>
                   </div>
                   
                   <button
                     type="button"
                     onClick={() => addToCart({
-                      id: Number(item.id), // 🟢 FIXED: Keeps original ID intact to connect with CartContext
+                      id: Number(item.id) + 2000,
                       name: item.name,
-                      price: Number(item.price) || 0,
+                      price: Number(item.price),
                       quantity: 1,
                       image: item.img,
                       isRental: true,
                       isByDozen: false
                     })}
-                    className="bg-emerald-900 hover:bg-emerald-800 active:scale-95 text-white text-[11px] font-bold px-3 py-2 rounded-xl transition-all"
+                    className="bg-emerald-900 hover:bg-emerald-800 active:scale-95 text-white text-[11px] font-bold px-3 py-2.5 rounded-xl transition-all duration-200 flex items-center gap-1 cursor-pointer shadow-md shadow-emerald-950/20"
                   >
-                    <span>Rent Item</span>
+                    <Plus className="w-3.5 h-3.5 text-amber-500 transform group-hover:rotate-90 transition-transform duration-300" />
+                    <span>Rent Supply</span>
                   </button>
                 </div>
               </div>
