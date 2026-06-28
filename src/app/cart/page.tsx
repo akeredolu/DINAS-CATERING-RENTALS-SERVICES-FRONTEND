@@ -60,65 +60,80 @@ export default function CartAndCheckoutPage() {
   };
 
   // Dispatch fully validated data payload arrays to Django
-  const executeBackendOrderSubmission = async (paymentDetails: { reference: string, status: boolean }) => {
-    setProcessing(true);
-    
-    // Safety Log: Inspect your actual browser state object structure
-    console.log("👉 CURRENT CART STATE METADATA:", cart);
+  const executeBackendOrderSubmission = async (
+  paymentDetails: { reference: string; status: boolean }
+) => {
+  setProcessing(true);
 
-    const payload = {
-      client_name: shipping.name,
-      client_email: shipping.email,
-      client_phone: shipping.phone,
-      delivery_address: shipping.address,
-      delivery_date: new Date().toISOString(), 
-      payment_method: paymentMethod,
-      payment_status: paymentDetails.status,
-      total_amount: getCartTotal(),
-      paystack_reference: paymentDetails.reference,
-      
-      // 🛠️ CLEAN & TYPE-SAFE RE-MAPPER PIPELINE:
-      items: cart.map(item => {
-        let cleanNumericId = Number(item.id);
+  const backendBaseUrl =
+    process.env.NEXT_PUBLIC_API_URL ||
+    "https://dinas-catering-rentals-services-backend.onrender.com";
 
-        if (cleanNumericId > 500) {
-          cleanNumericId = cleanNumericId - 500;
-        }
+  const payload = {
+    client_name: shipping.name,
+    client_email: shipping.email,
+    client_phone: shipping.phone,
+    delivery_address: shipping.address,
+    delivery_date: new Date().toISOString(),
+    payment_method: paymentMethod,
+    payment_status: paymentDetails.status,
+    total_amount: getCartTotal(),
+    paystack_reference: paymentDetails.reference,
 
-        return {
-          item: cleanNumericId,
-          quantity: item.quantity,
-          price: item.price, 
-          is_by_dozen: item.isByDozen || false
-        };
-      })
-    };
-
-    try {
-      // 🚀 DYNAMIC ROUTING PATHWAY FOR LOCAL VS LIVE SERVERS
-      const backendBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000";
-      
-      const res = await fetch(`${backendBaseUrl}/api/orders/create/`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-
-      if (res.ok) {
-        clearCart();
-        setOrderComplete(true);
-      } else {
-        const errorData = await res.json();
-        console.error("Django Validation Exceptions:", errorData);
-        alert("Server validation failed. Please inspect input entries.");
-      }
-    } catch (err) {
-      console.error("Connection failed:", err);
-      alert("Could not connect to the server. Check your network connection.");
-    } finally {
-      setProcessing(false);
-    }
+    items: cart.map((item) => ({
+      item: Number(item.id),
+      quantity: Number(item.quantity),
+      price: Number(item.price),
+      is_by_dozen: item.isByDozen ?? false,
+    })),
   };
+
+  console.log("========== ORDER PAYLOAD ==========");
+  console.log(payload);
+
+  try {
+    const res = await fetch(
+      `${backendBaseUrl}/api/orders/create/`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(payload),
+      }
+    );
+
+    console.log("Status:", res.status);
+
+    const data = await res.json();
+
+    console.log("Response:", data);
+
+    if (!res.ok) {
+      alert(
+        data.detail ||
+          data.message ||
+          JSON.stringify(data)
+      );
+      return;
+    }
+
+    clearCart();
+    setOrderComplete(true);
+  } catch (error) {
+    console.error("Checkout Error:", error);
+
+    if (error instanceof Error) {
+      alert(error.message);
+    } else {
+      alert("Unknown error occurred.");
+    }
+  } finally {
+    setProcessing(false);
+  }
+};
+
 
   if (orderComplete) {
     return (
