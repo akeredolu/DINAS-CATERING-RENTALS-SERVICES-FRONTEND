@@ -127,19 +127,28 @@ export default function IntegratedCorporateHub() {
     }
   ]);
   const [currentHeroIndex, setCurrentHeroIndex] = useState(0);
+  
 
-  // Unified Catalog Streamer & Hero Picture Aggregator
+    // Unified Catalog Streamer & Hero Picture Aggregator (CORRECTED)
   useEffect(() => {
     const fetchMarketplaceData = async () => {
       try {
         const response = await fetch(`${API_BASE_URL}/api/marketplace-catalog/`);
         if (response.ok) {
           const data = await response.json();
-          setLiveFoodMenu(data.foodMenu || []);
-          setLiveRentalInventory(data.rentalInventory || []);
           
+          // 🟢 FIXED: Linked directly to snake_case payload arrays returning from Django DRF
+          setLiveFoodMenu(data.foodmenu || []);
+          setLiveRentalInventory(data.rentalinventory || []);
+          
+          // 🟢 FIXED: Normalizes database image strings into readable imageUrl parameters safely
           if (data.heroSlides && data.heroSlides.length > 0) {
-            setLiveHeroSlides(data.heroSlides);
+            const normalizedSlides = data.heroSlides.map((slide: any) => ({
+              id: slide.id || `live-${Math.random()}`,
+              imageUrl: slide.image || slide.imageUrl || '', 
+              altText: slide.alt_text || slide.altText || 'Dina Catering Carousel'
+            }));
+            setLiveHeroSlides(normalizedSlides);
           }
         }
       } catch (err) {
@@ -150,6 +159,7 @@ export default function IntegratedCorporateHub() {
     };
     fetchMarketplaceData();
   }, []);
+
 
   // Automatic Hero Carousel Cycle Loop
   useEffect(() => {
