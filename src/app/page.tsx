@@ -135,8 +135,8 @@ export default function IntegratedCorporateHub() {
         const response = await fetch(`${API_BASE_URL}/api/marketplace-catalog/`);
         if (response.ok) {
           const data = await response.json();
-          setLiveFoodMenu(data.catalog.dishes || []);
-          setLiveRentalInventory(data.catalog.hardware || []);
+          setLiveFoodMenu(data.foodMenu || []);
+          setLiveRentalInventory(data.rentalInventory || []);
           
           if (data.heroSlides && data.heroSlides.length > 0) {
             setLiveHeroSlides(data.heroSlides);
