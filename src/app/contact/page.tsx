@@ -151,7 +151,7 @@ export default function ContactPage() {
                 </li>
                 <li className="flex items-start gap-3.5">
                   <MapPin className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
-                  <span className="font-medium leading-relaxed">Plot 123 Event Avenue, Wuse II, Abuja, Nigeria</span>
+                  <span className="font-medium leading-relaxed">PW-Kubwa, Abuja, Nigeria</span>
                 </li>
                 <li className="flex items-start gap-3.5">
                   <Clock className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
@@ -170,7 +170,7 @@ export default function ContactPage() {
                 </p>
               </div>
               <a 
-                href="https://wa.me/2348036072417?text=Hello%20Dina%20Catering%20Services.%20I%20would%20like%20to%20make%20an%20enquiry." 
+                href="https://wa.me/2348036072417?text=Hello%20Dina%20Catering%20Services.%20I%20would%20like%20to%20make%20an%20enquiry."
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black uppercase tracking-wider py-3.5 rounded-xl transition w-full shadow-md shadow-emerald-700/10 cursor-pointer active:scale-98"

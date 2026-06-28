@@ -33,7 +33,7 @@ export default function Footer() {
           </p>
           <div className="pt-2">
             <a 
-              href="https://wa.me/2348000000000?text=Hello%20Dina%20Events,%20I%20need%20assistance%20with%20an%20Services."
+              href="https://wa.me/+2348036072417?text=Hello%20Dina%20Events,%20I%20need%20assistance%20with%20an%20Services."
               target="_blank" 
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition shadow-sm"
@@ -100,7 +100,7 @@ export default function Footer() {
             </li>
             <li className="flex items-center gap-3">
               <Phone className="w-4 h-4 text-amber-500 shrink-0" />
-              <span>+234 800 000 0000</span>
+              <span>+234 803 607 2417</span>
             </li>
             <li className="flex items-center gap-3">
               <Mail className="w-4 h-4 text-amber-500 shrink-0" />
