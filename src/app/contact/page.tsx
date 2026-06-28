@@ -14,7 +14,9 @@ export default function ContactPage() {
     
     try {
       // 🚀 DYNAMIC ROUTING PATHWAY: Swap local host string with process.env
-      const backendBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
+      const backendBaseUrl =
+  process.env.NEXT_PUBLIC_API_URL ??
+  "https://dinas-catering-rentals-services-backend.onrender.com";
 
       const response = await fetch(`${backendBaseUrl}/api/contact/`, {
         method: 'POST',
@@ -168,7 +170,7 @@ export default function ContactPage() {
                 </p>
               </div>
               <a 
-                href="https://wa.me" 
+                href="https://wa.me/2348036072417?text=Hello%20Dina%20Catering%20Services.%20I%20would%20like%20to%20make%20an%20enquiry." 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black uppercase tracking-wider py-3.5 rounded-xl transition w-full shadow-md shadow-emerald-700/10 cursor-pointer active:scale-98"
